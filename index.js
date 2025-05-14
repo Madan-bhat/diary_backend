@@ -3,7 +3,6 @@ import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
-import bodyParser from 'body-'
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
