@@ -94,6 +94,8 @@ function uploadMemory(userId, title, description, location, date, selectedImages
         VALUES (?, ?)
       `)
 
+      console.log("images detected",selectedImages)
+
       if (selectedImages && Array.isArray(selectedImages)) {
         console.log("Received images count:", selectedImages.length);
         for (const image of selectedImages) {
