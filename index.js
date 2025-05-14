@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
+import bodyParser from 'body-'
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
@@ -27,7 +28,8 @@ const PORT = process.env.PORT || 3000;
 setupDatabase();
 
 // Middleware
-app.use(express.json());
+app.use(express.json({limit:'50mb'}));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
