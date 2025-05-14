@@ -152,9 +152,10 @@ function setupDatabase() {
     )
   `).run()
 
+  // Temporarily disable foreign key checks
+  db.pragma('foreign_keys = OFF');
+
   db.prepare(`
-    PRAGMA foreign_keys = OFF;
-    
     CREATE TABLE IF NOT EXISTS memory_uploads_new (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER NOT NULL,
@@ -164,17 +165,20 @@ function setupDatabase() {
       memory_date DATETIME NOT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-    );
-    
+    )
+  `).run();
+
+  db.prepare(`
     INSERT INTO memory_uploads_new (id, user_id, title, description, location, memory_date, created_at)
-    SELECT id, user_id, title, description, location, memory_date, created_at FROM memory_uploads;
-    
-    DROP TABLE IF EXISTS memory_uploads;
-    
-    ALTER TABLE memory_uploads_new RENAME TO memory_uploads;
-    
-    PRAGMA foreign_keys = ON;
-  `).run()
+    SELECT id, user_id, title, description, location, memory_date, created_at FROM memory_uploads
+  `).run();
+
+  db.prepare(`DROP TABLE IF EXISTS memory_uploads`).run();
+
+  db.prepare(`ALTER TABLE memory_uploads_new RENAME TO memory_uploads`).run();
+
+  // Re-enable foreign key checks
+  db.pragma('foreign_keys = ON');
 
   console.log('Database setup completed');
 }
