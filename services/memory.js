@@ -72,7 +72,7 @@ async function updateUserMemory(userId, userMessage, aiResponse) {
 // Database functions for memory uploads with base64 images
 
 // Upload a new memory with multiple images
-function uploadMemory(userId, title, description, location, date, selectedImages) {
+function uploadMemory({userId, title, description, location, date, selectedImages}) {
   try {
     // Begin transaction
     db.prepare("BEGIN TRANSACTION").run()

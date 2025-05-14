@@ -15,9 +15,12 @@ router.post("/", authenticate, async (req, res) => {
     }
 
 
-    console.log(req.body)
+    console.log('selected images',selectedImages)
     // Process the images - in a real implementation, you'd validate the base64 strings
-    const result = uploadMemory(userId, title, description, location, date, selectedImages)
+    const result = uploadMemory({
+
+   userId, title, description, location, date, selectedImages
+    })
 
     if (!result.success) {
       return res.status(500).json({ error: result.error || "Failed to upload memory" })
