@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI("AIzaSyDPfLu2pisvkaTYjhYNPtT4LXPyLe0rtpw");
 
 // Mood emoji mapping
 const moodEmojis = {
