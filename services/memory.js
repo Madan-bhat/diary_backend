@@ -1,4 +1,5 @@
 import { db } from "./storage.js"
+db.prepare("PRAGMA foreign_keys = ON").run()
 import { GoogleGenerativeAI } from "@google/generative-ai"
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
