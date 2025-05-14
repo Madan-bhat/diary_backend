@@ -142,6 +142,40 @@ function setupDatabase() {
     }
   }
 
+   db.prepare(`
+    CREATE TABLE IF NOT EXISTS memory_images (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      memory_id INTEGER NOT NULL,
+      image_base64 TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (memory_id) REFERENCES memory_uploads (id) ON DELETE CASCADE
+    )
+  `).run()
+
+  db.prepare(`
+    PRAGMA foreign_keys = OFF;
+    
+    CREATE TABLE IF NOT EXISTS memory_uploads_new (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      title TEXT NOT NULL,
+      description TEXT,
+      location TEXT,
+      memory_date DATETIME NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    );
+    
+    INSERT INTO memory_uploads_new (id, user_id, title, description, location, memory_date, created_at)
+    SELECT id, user_id, title, description, location, memory_date, created_at FROM memory_uploads;
+    
+    DROP TABLE IF EXISTS memory_uploads;
+    
+    ALTER TABLE memory_uploads_new RENAME TO memory_uploads;
+    
+    PRAGMA foreign_keys = ON;
+  `).run()
+
   console.log('Database setup completed');
 }
 
