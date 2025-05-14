@@ -95,9 +95,11 @@ function uploadMemory(userId, title, description, location, date, images) {
       `)
 
       if (images && Array.isArray(images)) {
+        console.log("Received images count:", images.length);
         for (const image of images) {
-           const base64 = image.split(',')[1] || image; // Strip "data:image/jpeg;base64,"
-  insertImage.run(memoryId, base64)
+          const base64 = image.split(',')[1] || image; // Strip "data:image/jpeg;base64,"
+          console.log("Storing image with base64 length:", base64.length);
+          insertImage.run(memoryId, base64);
         }
       }
 
