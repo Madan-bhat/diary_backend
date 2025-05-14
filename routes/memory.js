@@ -14,6 +14,8 @@ router.post("/", authenticate, async (req, res) => {
       return res.status(400).json({ error: "Title and date are required" })
     }
 
+
+    console.log(req.body)
     // Process the images - in a real implementation, you'd validate the base64 strings
     const result = uploadMemory(userId, title, description, location, date, selectedImages)
 
