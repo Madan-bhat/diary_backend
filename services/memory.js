@@ -96,7 +96,8 @@ function uploadMemory(userId, title, description, location, date, images) {
 
       if (images && Array.isArray(images)) {
         for (const image of images) {
-          insertImage.run(memoryId, image)
+           const base64 = image.split(',')[1] || image; // Strip "data:image/jpeg;base64,"
+  insertImage.run(memoryId, base64)
         }
       }
 
