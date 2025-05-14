@@ -72,7 +72,7 @@ async function updateUserMemory(userId, userMessage, aiResponse) {
 // Database functions for memory uploads with base64 images
 
 // Upload a new memory with multiple images
-function uploadMemory(userId, title, description, location, date, images) {
+function uploadMemory(userId, title, description, location, date, selectedImages) {
   try {
     // Begin transaction
     db.prepare("BEGIN TRANSACTION").run()
@@ -94,9 +94,9 @@ function uploadMemory(userId, title, description, location, date, images) {
         VALUES (?, ?)
       `)
 
-      if (images && Array.isArray(images)) {
-        console.log("Received images count:", images.length);
-        for (const image of images) {
+      if (selectedImages && Array.isArray(selectedImages)) {
+        console.log("Received images count:", selectedImages.length);
+        for (const image of selectedImages) {
           const base64 = image.split(',')[1] || image; 
           console.log("Storing image with base64 length:", base64.length);
           insertImage.run(memoryId, base64);
@@ -109,7 +109,7 @@ function uploadMemory(userId, title, description, location, date, images) {
       return {
         success: true,
         memoryId,
-        imageCount: images ? images.length : 0,
+        imageCount: selectedImages ? selectedImages.length : 0,
       }
     } catch (error) {
       // Rollback transaction on error
