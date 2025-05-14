@@ -111,6 +111,7 @@ function uploadMemory({userId, title, description, location, date, selectedImage
       return {
         success: true,
         memoryId,
+        
         imageCount: selectedImages ? selectedImages.length : 0,
       }
     } catch (error) {
@@ -136,29 +137,23 @@ function getMemories(userId) {
     `)
       .all(userId)
 
-    // Get image counts and first image for each memory
+    // For each memory, get all images, image count, and thumbnail
     return memories.map((memory) => {
-      const imageCount = db
+      // Get all images for this memory
+      const images = db
         .prepare(`
-        SELECT COUNT(*) as count FROM memory_images
-        WHERE memory_id = ?
-      `)
-        .get(memory.id).count
-
-      // Get first image as thumbnail if available
-      const firstImage = db
-        .prepare(`
-        SELECT image_base64 FROM memory_images
+        SELECT id, image_base64
+        FROM memory_images
         WHERE memory_id = ?
         ORDER BY created_at ASC
-        LIMIT 1
       `)
-        .get(memory.id)
+        .all(memory.id)
 
       return {
         ...memory,
-        imageCount,
-        thumbnail: firstImage ? firstImage.image_base64 : null,
+        imageCount: images.length,
+        thumbnail: images[0]?.image_base64 || null,
+        images,
       }
     })
   } catch (error) {
