@@ -153,7 +153,7 @@ function setupDatabase() {
   `).run()
 
   // Temporarily disable foreign key checks
-  db.pragma('foreign_keys = OFF');
+  db.pragma('foreign_keys = ON');
 
   db.prepare(`
     CREATE TABLE IF NOT EXISTS memory_uploads_new (
